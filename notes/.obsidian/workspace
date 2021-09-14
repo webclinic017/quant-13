@@ -1,0 +1,107 @@
+{
+  "main": {
+    "id": "a63ef068e86e8c29",
+    "type": "split",
+    "children": [
+      {
+        "id": "2fd5cc4e828ebbc3",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "3 Resources/Quant.md",
+            "mode": "source"
+          }
+        },
+        "group": "d25ed8b071ca9283"
+      },
+      {
+        "id": "5e4e7db651e1de97",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "3 Resources/Quant.md",
+            "mode": "preview"
+          }
+        },
+        "group": "d25ed8b071ca9283"
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c3f1dcad2ae95181",
+    "type": "split",
+    "children": [
+      {
+        "id": "faa125068d9b0884",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1a7e15b49859dfa5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "7c37e1aef3dc3674",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "79f8a0f7ad3134d7",
+    "type": "split",
+    "children": [
+      {
+        "id": "4d7eb1c9a1ffeead",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "29fa08fbcf4e7684",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "3 Resources/Quant.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "2fd5cc4e828ebbc3",
+  "lastOpenFiles": [
+    "3 Resources/Quant.md",
+    "Untitled.md"
+  ]
+}
