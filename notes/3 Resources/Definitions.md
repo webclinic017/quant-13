@@ -5,4 +5,21 @@ Is Stock Data comprised of the highest and lowest price  on any given Day as wel
 Source: https://en.wikipedia.org/wiki/Open-high-low-close_chart
 ***
 
+### SMA (simple moving average)
+
+A simple moving average (SMA) calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.
+
+Source: https://www.investopedia.com/terms/s/sma.asp
+
+***
+
+### Indicator
+
+^5a833b
+
+Indicators are statistics used to measure current conditions as well as to forecast financial or economic trends. ^c98c66
+
+Source: https://www.investopedia.com/terms/i/indicator.asp
+
+
 

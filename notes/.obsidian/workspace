@@ -9,23 +9,10 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "3 Resources/Backtesting.py.md",
-            "mode": "source"
-          }
-        },
-        "group": "834fec60e62ce3c2"
-      },
-      {
-        "id": "4250e3e9e2c48cfb",
-        "type": "leaf",
-        "state": {
-          "type": "markdown",
-          "state": {
-            "file": "3 Resources/Backtesting.py.md",
+            "file": "1 Projects/Learn about some Basic Indicators.md",
             "mode": "preview"
           }
-        },
-        "group": "834fec60e62ce3c2"
+        }
       }
     ],
     "direction": "vertical"
@@ -81,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "3 Resources/Backtesting.py.md",
+                "file": "1 Projects/Learn about some Basic Indicators.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,17 +86,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "4250e3e9e2c48cfb",
+  "active": "5e4e7db651e1de97",
   "lastOpenFiles": [
+    "1 Projects/Learn about some Basic Indicators.md",
+    "1 Projects/Implement Basic Strategies.md",
     "3 Resources/Backtesting.py.md",
     "3 Resources/Backtrader.md",
-    "3 Resources/Untitled.md",
     "3 Resources/Definitions.md",
-    "2 Areas/Backtesting/ToDo.md",
-    "2 Areas/Strategies/ToDo.md",
     "3 Resources/Quant.md",
-    "4 Archives/DummyArchivedProject.md",
-    "1 Projects/DummyProject.md",
-    "!Definitions.md"
+    "2 Areas/Strategies/Alligator Indicator.md",
+    "2 Areas/Backtesting/ToDo.md",
+    "2 Areas/Actual Trading/Find Broker.md",
+    "4 Archives/DummyArchivedProject.md"
   ]
 }
