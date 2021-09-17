@@ -5,9 +5,13 @@
 - Quantitative Value
 	- Erreichbar: Uni-Bib (E-Book)	
 - Quantitative Strategies for Achieving Alpha
-	- Erreichbar : ?
+	- Erreichbar: ?
 - Expected Returns: An Investor's Guide to Harvesting Market Rewards
-	- Erreichbar : ?
+	- Erreichbar: ?
+- Quantitative Trading: How to Build Your Own Algorithmic Trading Business
+	- Erreichbar: ?
+-Machine Learning for Algorithmic Trading:
+	- Erreichbar: ?
 
 
 ## Script/Slides
