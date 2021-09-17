@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "2 Areas/Strategies/ToDo.md",
+            "file": "3 Resources/Definitions.md",
             "mode": "preview"
           }
         }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2 Areas/Strategies/ToDo.md",
+                "file": "3 Resources/Definitions.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -87,11 +87,11 @@
   },
   "active": "5e4e7db651e1de97",
   "lastOpenFiles": [
+    "3 Resources/Definitions.md",
+    "3 Resources/Backtesting.py.md",
     "2 Areas/Strategies/ToDo.md",
     "2 Areas/Backtesting/ToDo.md",
-    "3 Resources/Backtesting.py.md",
     "3 Resources/Quant.md",
-    "3 Resources/Definitions.md",
     "4 Archives/DummyArchivedProject.md",
     "1 Projects/DummyProject.md",
     "!Definitions.md",
