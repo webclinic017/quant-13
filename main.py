@@ -1,1 +1,3 @@
-print('Hi Merc!')
+from src.test import run
+
+run()
