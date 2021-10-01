@@ -7,7 +7,7 @@ Source: https://en.wikipedia.org/wiki/Open-high-low-close_chart
 
 ### SMA (simple moving average)
 
-A simple moving average (SMA) calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.
+A simple moving average (SMA) calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range. ^699f33
 
 Source: https://www.investopedia.com/terms/s/sma.asp
 
@@ -20,6 +20,14 @@ Source: https://www.investopedia.com/terms/s/sma.asp
 Indicators are statistics used to measure current conditions as well as to forecast financial or economic trends. ^c98c66
 
 Source: https://www.investopedia.com/terms/i/indicator.asp
+
+***
+
+### Pullback
+
+A pullback is a pause or moderate drop in a stock or commodities pricing chart from recent peaks that occur within a continuing uptrend.
+
+Source: https://www.investopedia.com/terms/p/pullback.asp
 
 
 
