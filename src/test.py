@@ -1,8 +1,11 @@
 import pandas as pd
+import os
 
 from backtesting import Backtest, Strategy
 from .strategies.crossover import SmaCross
 from .strategies.BuyOnEven import BuyOnEven
+
+html_dir = "html"
 
 #Collect Data from CSV base on its Stock name
 def datafromcsv(Stock):
@@ -18,4 +21,8 @@ def run(strategy=SmaCross, strategy_str="SmaCross"):
     bt = Backtest(datafromcsv("AAPL"), strategy, commission=.002,
                 exclusive_orders=True)
     stats = bt.run()
-    bt.plot(filename="./html/" + strategy_str)
+
+    if not os.path.exists(html_dir):
+        os.mkdir(html_dir)
+
+    bt.plot(filename='./' + html_dir + '/' + strategy_str)
