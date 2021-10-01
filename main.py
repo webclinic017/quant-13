@@ -1,4 +1,3 @@
-from src.test import bt
+from src.test import run
 
-stats = bt.run()
-bt.plot()
+run()

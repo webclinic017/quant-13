@@ -14,6 +14,8 @@ def datafromcsv(Stock):
     data = data.sort_index()
     return data
 
-
-bt = Backtest(datafromcsv("AAPL"), BuyOnEven, commission=.002,
-              exclusive_orders=True)
+def run(strategy=SmaCross, strategy_str="SmaCross"):
+    bt = Backtest(datafromcsv("AAPL"), strategy, commission=.002,
+                exclusive_orders=True)
+    stats = bt.run()
+    bt.plot(filename="./html/" + strategy_str)
