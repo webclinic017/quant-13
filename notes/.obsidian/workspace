@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "1 Projects/Learn about some Basic Indicators.md",
+            "file": "2 Areas/Strategies/Alligator Indicator.md",
             "mode": "preview"
           }
         }
@@ -68,7 +68,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1 Projects/Learn about some Basic Indicators.md",
+                "file": "2 Areas/Strategies/Alligator Indicator.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -88,15 +88,15 @@
   },
   "active": "5e4e7db651e1de97",
   "lastOpenFiles": [
+    "2 Areas/Strategies/Alligator Indicator.md",
+    "2 Areas/Strategies/Crossover.md",
+    "2 Areas/Strategies/Range Trading Strategy.md",
+    "3 Resources/Quant.md",
+    "3 Resources/Definitions.md",
+    "3 Resources/Backtrader.md",
     "1 Projects/Learn about some Basic Indicators.md",
     "1 Projects/Implement Basic Strategies.md",
     "3 Resources/Backtesting.py.md",
-    "3 Resources/Backtrader.md",
-    "3 Resources/Definitions.md",
-    "3 Resources/Quant.md",
-    "2 Areas/Strategies/Alligator Indicator.md",
-    "2 Areas/Backtesting/ToDo.md",
-    "2 Areas/Actual Trading/Find Broker.md",
-    "4 Archives/DummyArchivedProject.md"
+    "2 Areas/Backtesting/ToDo.md"
   ]
 }
