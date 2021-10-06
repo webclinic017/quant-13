@@ -3,7 +3,7 @@ import numpy as np
 import os
 from datetime import date
 
-from backtesting import Backtest, Strategy
+from backtesting import Backtest
 from .strategies.crossover import SmaCross
 from .strategies.BuyOnEven import BuyOnEven
 from .strategies.aligartor_indicator import AligatorIndicator

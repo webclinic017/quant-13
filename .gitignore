@@ -4,3 +4,5 @@ __pycache__/*
 *.pyc
 .vscode
 html/*
+
+test.csv

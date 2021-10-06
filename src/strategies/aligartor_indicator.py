@@ -3,7 +3,7 @@ import pandas as pd
 from backtesting import Strategy
 from ..indicators import moving_average
 
-def aligator_indicator(green, red, blue):    
+def aligator_indicator(green, red, blue):
     try:
         is_red_blue_crossover = red[-2] < blue[-2] and red[-1] > blue[-1]
         is_blue_red_crossover =  red[-2] > blue[-2] and red[-1] < blue[-1]
