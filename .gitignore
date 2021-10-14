@@ -1,8 +1,13 @@
+#Python stuff
 venv
 __pycache__
 __pycache__/*
 *.pyc
 .vscode
 html/*
-
 test.csv
+#Server stuff
+.env
+/node_modules
+yarn-error.log
+yarn.lock
