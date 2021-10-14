@@ -2,15 +2,17 @@ import numpy as np
 import pandas as pd
 
 from datetime import date
+from abc import abstractmethod, ABCMeta
 
 from ..indicators import moving_average
 
-class Strategy:
+class Strategy(metaclass=ABCMeta):
     def __init__(self, data=None, cash=None):
         self.data = data
         self.cash = cash
         self.indicators = dict()
-        self.position = Position()
+        self._broker = Broker(self.cash, self.data)
+        self.position = self._broker.position
         self.order = None
 
         # self.init()
@@ -19,9 +21,13 @@ class Strategy:
         indicator_data = indicator_function(data, *args, **kwargs)
         return indicator_data
     
+
+    ## init nad next will be inited in the strategy defined by the user
+    @abstractmethod
     def init(self):
         pass
 
+    @abstractmethod
     def next(self):
         pass
 
@@ -29,27 +35,125 @@ class Strategy:
         self.order = None
         self.init()
         self.next()
-        return self.order
+        self._broker.process_orders()
+        return self.trades
 
-    def sell(self):
-        self.order = 'sell'
+    def buy(self, *,
+            size: float = None,
+            limit: float = None,
+            stop: float = None,
+            sl: float = None,
+            tp: float = None):
 
-    def buy(self):
-        self.order = 'buy'
+        return self._broker.new_order(size, "buy", limit, stop, sl, tp)
+
+    def sell(self, *,
+             size: float = None,
+             limit: float = None,
+             stop: float = None,
+             sl: float = None,
+             tp: float = None):
+
+        return self._broker.new_order(-size, "sell", limit, stop, sl, tp)
+
+    @property
+    def position(self):
+        return self._broker.position
+
+    @property
+    def orders(self):
+        return self._broker.orders
+
+    @property
+    def trades(self):
+        return self._broker.trades
 
 class Position:
-    """
-    Only buy and close state for the moment.
-    """
-    def __init__(self, position_type='cash', position_value=0):
-        self.type = position_type # long,short, cash
-        self.value = 0
-    def close(self):
-        if self.type == 'buy':
-            self.type = 'sell'
-        if self.type == 'sell':
-            self.type = 'buy'
 
+    def __init__(self, broker):
+        self._broker = broker
+
+    def close(self):
+        for trade in self._broker.trades:
+            trade.close()
+
+
+class Order:
+    def __init__(self , broker, size, order_type):
+        self.__broker = broker
+        self._size = size
+        self._order_type = order_type
+    def cancel(self):
+        self.__broker.orders.remove(self)
+
+class Trade:
+    def __init__(self, broker, size, prize, trade_type):
+        self.__broker = broker
+        self._size = size
+        self._prize = prize
+        self._trade_type = trade_type
+
+#    def close(self):
+#         if self._trade_type == 'buy':
+#             order = self.__broker.new_order(self._size,"sell")
+#         if self._trade_type == 'sell':
+#             order = self.__broker.new_order(self._size,"buy")
+#         #Warning!!!! order can be None
+#         self.__broker.orders.insert(0, order)
+    
+    @property
+    def value(self):
+        return abs(self._size)*self._prize
+    
+        
+
+class Broker:
+    def __init__(self, *, data, cash):
+        self.orders = []
+        self.trades = []
+        self._exclusive_orders = None
+        self._data = data
+        self._cash = cash
+        self.position = Position(self)
+        
+
+    def new_order(self, size, order_type, limit, stop, sl, tp):
+        ## Args should be changend in the fuure for more functionality
+        order = Order(self, size,  order_type)
+        if self._exclusive_orders:
+            for order in self.orders:
+                order.cancel()
+            for trade in self.trades:
+                trade.close() 
+        
+        self.orders.append(order)
+        return order
+
+    def process_orders(self):
+        data = self._data
+        try:
+            _open, high, low = data.Open[-1], data.High[-1], data.Low[-1]
+            old_close = data.Close[-2]
+        except IndexError:
+            return
+
+        for order in list(self.orders):
+            ##needs to be a integer dont know how ?!
+            size = int(order._size)
+            self.open_trade(size, _open, order._order_type)
+            self.orders.remove(order)
+
+
+    def open_trade(self, size, price, trade_type):
+        trade = Trade(self, size, price, trade_type)
+        self.trades.append(trade)
+        return trade
+
+
+
+
+
+    
 class Backtest:
     def __init__(self, data, strategy, commission=0.022, exclusive_orders=True):
         self.data = data
@@ -74,7 +178,12 @@ class Backtest:
     def run(self):
         for i in range(1, len(self.data.index)):
             self.strategy.data = self.data.iloc[:i]
-            self.data_extend_order(self.strategy.get_order(), i)
+            trades = self.strategy.get_order()
+            if len(trades = 0):
+                out = ""
+            else:
+                out = trades[0]._trade_type
+            self.data_extend_order(out, i)
             # print(self.strategy.data)
 
         self.data.to_csv('test.csv')
