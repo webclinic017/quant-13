@@ -4,7 +4,7 @@ __pycache__
 __pycache__/*
 *.pyc
 .vscode
-html/*
+html
 test.csv
 #Server stuff
 .env
