@@ -8,11 +8,11 @@ from ..indicators import moving_average
 
 class Strategy(metaclass=ABCMeta):
     def __init__(self, data=None, cash=None):
+        print(data)
         self.data = data
         self.cash = cash
         self.indicators = dict()
-        self._broker = Broker(self.cash, self.data)
-        self.position = self._broker.position
+        self._broker = Broker(data=self.data,cash = self.cash)
         self.order = None
 
         # self.init()
@@ -36,25 +36,17 @@ class Strategy(metaclass=ABCMeta):
         self.init()
         self.next()
         self._broker.process_orders()
-        return self.trades
+        return self._broker.trades
 
-    def buy(self, *,
-            size: float = None,
-            limit: float = None,
-            stop: float = None,
-            sl: float = None,
-            tp: float = None):
+    def buy(self,
+            size: float = 1):
 
-        return self._broker.new_order(size, "buy", limit, stop, sl, tp)
+        return self._broker.new_order(size, "buy")
 
-    def sell(self, *,
-             size: float = None,
-             limit: float = None,
-             stop: float = None,
-             sl: float = None,
-             tp: float = None):
+    def sell(self,
+             size: float = 1):
 
-        return self._broker.new_order(-size, "sell", limit, stop, sl, tp)
+        return self._broker.new_order(size, "sell")
 
     @property
     def position(self):
@@ -74,6 +66,7 @@ class Position:
         self._broker = broker
 
     def close(self):
+        print("closing all positions", len(self._broker.trades))
         for trade in self._broker.trades:
             trade.close()
 
@@ -92,14 +85,14 @@ class Trade:
         self._size = size
         self._prize = prize
         self._trade_type = trade_type
-
-#    def close(self):
-#         if self._trade_type == 'buy':
-#             order = self.__broker.new_order(self._size,"sell")
-#         if self._trade_type == 'sell':
-#             order = self.__broker.new_order(self._size,"buy")
-#         #Warning!!!! order can be None
-#         self.__broker.orders.insert(0, order)
+    
+    def close(self):
+        if self._trade_type == 'buy':
+            order = self.__broker.new_order(self._size,"sell")
+        if self._trade_type == 'sell':
+            order = self.__broker.new_order(self._size,"buy")
+        #Warning!!!! order can be None
+        self.__broker.orders.insert(0, order)
     
     @property
     def value(self):
@@ -111,13 +104,20 @@ class Broker:
     def __init__(self, *, data, cash):
         self.orders = []
         self.trades = []
+        self.closed_trades = []
         self._exclusive_orders = None
         self._data = data
         self._cash = cash
         self.position = Position(self)
-        
 
-    def new_order(self, size, order_type, limit, stop, sl, tp):
+
+    def next(self):
+        ##current time index
+        i = len(self._data) - 1
+        self.process_orders()    
+
+    def new_order(self, size, order_type):
+        ##print("placing new order of size", size, "and type", order_type)
         ## Args should be changend in the fuure for more functionality
         order = Order(self, size,  order_type)
         if self._exclusive_orders:
@@ -130,6 +130,7 @@ class Broker:
         return order
 
     def process_orders(self):
+        print(len(self.orders),len(self.trades))
         data = self._data
         try:
             _open, high, low = data.Open[-1], data.High[-1], data.Low[-1]
@@ -139,7 +140,7 @@ class Broker:
 
         for order in list(self.orders):
             ##needs to be a integer dont know how ?!
-            size = int(order._size)
+            size = order._size
             self.open_trade(size, _open, order._order_type)
             self.orders.remove(order)
 
@@ -148,6 +149,11 @@ class Broker:
         trade = Trade(self, size, price, trade_type)
         self.trades.append(trade)
         return trade
+    def close_trade(self, trade ,price):
+        self.trades.remove(trade)
+        self.closed_trades.append(trade)
+        self._cash += trade.value
+
 
 
 
@@ -155,11 +161,13 @@ class Broker:
 
     
 class Backtest:
-    def __init__(self, data, strategy, commission=0.022, exclusive_orders=True):
+    def __init__(self, data, strategy, commission=0.022, exclusive_orders=True ,cash=100000):
         self.data = data
-        self.strategy = strategy()
+        self.broker = Broker(data=data, cash=cash)
+        self.strategy = strategy(data=data,cash=cash)
         self.commission = commission
         self.exclusive_orders = exclusive_orders
+        print(self.strategy.__dict__)
 
         self.creat_output_data_layout()
 
@@ -178,8 +186,12 @@ class Backtest:
     def run(self):
         for i in range(1, len(self.data.index)):
             self.strategy.data = self.data.iloc[:i]
-            trades = self.strategy.get_order()
-            if len(trades = 0):
+            self.broker.data = self.data.iloc[:i]
+            self.broker.next()
+            self.strategy.next()
+            
+            """ trades = self.strategy.get_order()
+            if len(trades) == 0:
                 out = ""
             else:
                 out = trades[0]._trade_type
@@ -187,7 +199,7 @@ class Backtest:
             # print(self.strategy.data)
 
         self.data.to_csv('test.csv')
-
+ """
     def plot(self):
         pass
 
@@ -216,14 +228,17 @@ class AligatorIndicator(Strategy):
         self.green = self.I(moving_average, price, 5, 3)
         self.red = self.I(moving_average, price, 8, 5)
         self.blue = self.I(moving_average, price, 13, 8)
+        print("Strategy inited")
 
     def next(self):
         indicator = aligator_indicator(self.green, self.red, self.blue)
         if indicator != None:
             if indicator:
+                print("requesting a buy order")
                 self.position.close()
                 self.buy()
             else:
+                print("requesting a sell order")
                 self.position.close()
                 self.sell()
 
@@ -240,6 +255,7 @@ def datafromcsv(Stock, start_date=np.datetime64(date(2000, 1, 1)), end_date=np.d
     return data
 
 def run(strategy=AligatorIndicator, strategy_str="AligatorIndicator"):
+    print("running")
     bt = Backtest(datafromcsv("AAPL"), strategy, commission=.002,
                 exclusive_orders=True)
     stats = bt.run()
