@@ -6,23 +6,23 @@ from abc import abstractmethod, ABCMeta
 
 from ..indicators import moving_average
 
+
 class Strategy(metaclass=ABCMeta):
     def __init__(self, data=None, cash=None):
-        print(data)
         self.data = data
         self.cash = cash
-        self.indicators = dict()
+        self.indicators = []
         self._broker = Broker(data=self.data,cash = self.cash)
         self.order = None
 
         # self.init()
 
     def I(self, indicator_function, data, *args, **kwargs):
-        indicator_data = indicator_function(data, *args, **kwargs)
-        return indicator_data
+        indicator = indicator_function(data, *args, **kwargs)
+        self.indicators.append(indicator)
+        return indicator
     
 
-    ## init nad next will be inited in the strategy defined by the user
     @abstractmethod
     def init(self):
         pass
@@ -40,6 +40,7 @@ class Strategy(metaclass=ABCMeta):
 
     def buy(self,
             size: float = 1):
+        print("buying")
 
         return self._broker.new_order(size, "buy")
 
@@ -117,7 +118,7 @@ class Broker:
         self.process_orders()    
 
     def new_order(self, size, order_type):
-        ##print("placing new order of size", size, "and type", order_type)
+        print("placing new order of size", size, "and type", order_type)
         ## Args should be changend in the fuure for more functionality
         order = Order(self, size,  order_type)
         if self._exclusive_orders:
@@ -130,7 +131,7 @@ class Broker:
         return order
 
     def process_orders(self):
-        print(len(self.orders),len(self.trades))
+        ##print(len(self.orders),len(self.trades))
         data = self._data
         try:
             _open, high, low = data.Open[-1], data.High[-1], data.Low[-1]
@@ -150,6 +151,7 @@ class Broker:
         self.trades.append(trade)
         return trade
     def close_trade(self, trade ,price):
+        print("closing trade")
         self.trades.remove(trade)
         self.closed_trades.append(trade)
         self._cash += trade.value
@@ -157,17 +159,17 @@ class Broker:
 
 
 
-
-
     
 class Backtest:
     def __init__(self, data, strategy, commission=0.022, exclusive_orders=True ,cash=100000):
+        #print("Input strategy",strategy)
         self.data = data
         self.broker = Broker(data=data, cash=cash)
         self.strategy = strategy(data=data,cash=cash)
         self.commission = commission
         self.exclusive_orders = exclusive_orders
-        print(self.strategy.__dict__)
+
+        
 
         self.creat_output_data_layout()
 
@@ -184,9 +186,29 @@ class Backtest:
         self.data["TradeType"].iloc[i] = strat_order
 
     def run(self):
+        #Initialize the strategy first
+        # I don't know if this is the right position for this. Might change in the future
+
+        self.strategy.init()
+
+        # Dirty Solutins maybe there is a better way to do this
+        indicator_attrs = {attr: indicator for attr, indicator in self.strategy.__dict__.items() if attr != 'data' and attr != "cash" and attr != "_broker" and attr != "indicators" and attr != "order"}
+
+        ##print(indicator_attrs)
+
+        #data = self.data.copy(deep=False)
+
         for i in range(1, len(self.data.index)):
+            #data = self.data.iloc[:i]
             self.strategy.data = self.data.iloc[:i]
             self.broker.data = self.data.iloc[:i]
+            # Slice Indicators
+            for attr in indicator_attrs:
+                indicator=indicator_attrs[attr] 
+
+                ##print(indicator.iloc[:i+1])
+                setattr(self.strategy, attr, indicator.iloc[:i+1])
+            
             self.broker.next()
             self.strategy.next()
             
@@ -197,9 +219,10 @@ class Backtest:
                 out = trades[0]._trade_type
             self.data_extend_order(out, i)
             # print(self.strategy.data)
-
+             """
+        print (self.broker.closed_trades,self.broker.orders,self.broker.trades)
         self.data.to_csv('test.csv')
- """
+
     def plot(self):
         pass
 
@@ -207,6 +230,7 @@ def aligator_indicator(green, red, blue):
     try:
         is_red_blue_crossover = red[-2] < blue[-2] and red[-1] > blue[-1]
         is_blue_red_crossover =  red[-2] > blue[-2] and red[-1] < blue[-1]
+  
 
         green_over_blue = green[-1] > blue[-1]
         blue_over_green = green[-1] < blue[-1]
@@ -228,7 +252,6 @@ class AligatorIndicator(Strategy):
         self.green = self.I(moving_average, price, 5, 3)
         self.red = self.I(moving_average, price, 8, 5)
         self.blue = self.I(moving_average, price, 13, 8)
-        print("Strategy inited")
 
     def next(self):
         indicator = aligator_indicator(self.green, self.red, self.blue)
